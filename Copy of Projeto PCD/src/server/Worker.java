@@ -42,7 +42,7 @@ public class Worker implements Serializable, Runnable{
 				Thread.sleep(5000);
 				connectToServer();
 			} catch (InterruptedException e1) {
-				e1.printStackTrace();
+				//e1.printStackTrace();
 			}
 		}
 	}
@@ -56,9 +56,9 @@ public class Worker implements Serializable, Runnable{
 						findExpression(m);
 				}
 			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			} catch (IOException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 	}
 }

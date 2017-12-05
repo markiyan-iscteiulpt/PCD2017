@@ -29,7 +29,6 @@ public class ThreadIn extends Thread {
 				switch (m.getType()) {
 				case CLIENT:
 				    this.to = new ThreadOut(out);
-//					this.s.getRequest_list().add(new Request(m.getRequest().getRequestString(), this.to));
 					this.s.newRequestArrived(new Request(m.getRequest().getRequestString(), this.to));
 					this.to.start();
 					break;
@@ -45,11 +44,10 @@ public class ThreadIn extends Thread {
 				default:
 					break;
 				}
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();	
+			} catch (IOException | ClassNotFoundException e) {
+				//e.printStackTrace();	
 			}
+			
 		}
 	}
 	

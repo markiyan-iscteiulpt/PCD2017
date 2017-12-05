@@ -41,7 +41,6 @@ public class DealWithRequest extends Thread {
 				this.taken_thread.sendMessage(new Message(Type.SERVER, this.article_list.get(aux), this.reqString, this.seq_number, aux));
 				taken_threads.put(this.aux, this.taken_thread);
 				aux++;
-				System.out.println(server.getWorker_queue().size());
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

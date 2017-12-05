@@ -59,12 +59,12 @@ public class Server {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
-		finally {
-			try{
-				serverSocket.close();
-			} catch (IOException e) {
-			}
-		}
+//		finally {
+//			try{
+//				serverSocket.close();
+//			} catch (IOException e) {
+//			}
+//		}
 	}
 
 	
