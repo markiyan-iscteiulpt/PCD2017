@@ -15,7 +15,7 @@ public class Run_Workers {
 	int PORT = 8080;
 	ExecutorService executor = Executors.newFixedThreadPool(10);
 		for (int i = 0; i < 10; i++) {
-            Runnable worker = new Worker(address, PORT);
+            Runnable worker = new Worker(address, PORT, i);
             executor.execute(worker);
           }
 	}

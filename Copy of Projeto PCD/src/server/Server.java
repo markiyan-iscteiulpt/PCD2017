@@ -8,11 +8,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.LinkedBlockingQueue;
-
 import struct.Article;
 import struct.Message;
 import struct.Request;
+import struct.WorkerQueue;
 
 public class Server {
 	
@@ -25,7 +24,7 @@ public class Server {
 	private ThreadIn ti;
 	private HashMap<Integer,DealWithRequest> dwr_list;
 	private ArrayList<Article> articles;
-	private LinkedBlockingQueue<ThreadOut> workers_queue;
+	private WorkerQueue worker_queue;
 	private int sequence_number = 0;
 	
 	public Server() throws InterruptedException{
@@ -36,7 +35,6 @@ public class Server {
 	private void loadArticles() throws InterruptedException{
 		dwr_list = new HashMap<Integer,DealWithRequest>();
 		articles = new ArrayList<>();
-		workers_queue = new LinkedBlockingQueue<>();
 		files = dir.listFiles();
 		for(File f : files){
 			articles.add(new Article(f));
@@ -46,6 +44,7 @@ public class Server {
 	
 	private void init() {
 		try {
+			worker_queue = new WorkerQueue();
 			serverSocket = new ServerSocket(PORT);
 			while(true){
 				System.out.println("Awaiting connections...");
@@ -59,18 +58,8 @@ public class Server {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
-//		finally {
-//			try{
-//				serverSocket.close();
-//			} catch (IOException e) {
-//			}
-//		}
 	}
 
-	
-	public synchronized LinkedBlockingQueue<ThreadOut> getWorker_queue() {
-		return this.workers_queue;
-	}
 
 	public synchronized void newRequestArrived(Request req) {
 			DealWithRequest dwr = new DealWithRequest(this.articles, req.getRequestString(), req.getTout(), this, this.sequence_number);
@@ -91,5 +80,9 @@ public class Server {
 	
 	public HashMap<Integer, DealWithRequest> getDwr_list() {
 		return dwr_list;
+	}
+
+	public WorkerQueue getWorkerQueue() {
+		return this.worker_queue;
 	}
 }

@@ -2,17 +2,17 @@ package struct;
 
 import java.io.Serializable;
 
-import server.ThreadOut;
+import server.Dispatcher;
 
 public class Request implements Serializable{
 	
 	private static final long serialVersionUID = -5941465274308594059L;
 	private String request;
-	private ThreadOut tout;
+	private Dispatcher tout;
 	
 	
 	
-	public Request(String request, ThreadOut tout) {
+	public Request(String request, Dispatcher tout) {
 		this.setRequest(request);
 		this.setTout(tout);
 	}
@@ -34,11 +34,11 @@ public class Request implements Serializable{
 		this.request = request;
 	}
 
-	public ThreadOut getTout() {
+	public Dispatcher getTout() {
 		return tout;
 	}
 
-	public void setTout(ThreadOut tout) {
+	public void setTout(Dispatcher tout) {
 		this.tout = tout;
 	}
 	

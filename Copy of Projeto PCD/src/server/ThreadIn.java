@@ -13,7 +13,7 @@ public class ThreadIn extends Thread {
 	private ObjectInputStream in;
 	private  transient ObjectOutputStream out;
 	private Server s;
-	private ThreadOut to;
+	private Dispatcher to;
 
 	public ThreadIn(Server s, ObjectInputStream in, ObjectOutputStream out) {
 		this.s = s;
@@ -28,15 +28,13 @@ public class ThreadIn extends Thread {
 				Message m = (Message) in.readObject();
 				switch (m.getType()) {
 				case CLIENT:
-				    this.to = new ThreadOut(out);
+				    this.to = new Dispatcher(out);
 					this.s.newRequestArrived(new Request(m.getRequest().getRequestString(), this.to));
-					this.to.start();
 					break;
 				case WORKER:
-					this.to = new ThreadOut(out);
-					s.getWorker_queue().add(this.to);
+					this.to = new Dispatcher(out, m.getID());
+					s.getWorkerQueue().getDispatcher_map().put(m.getID(), this.to);
 					break;
-					
 				case RESULT:
 					s.leadWithResult(m);
 					break;
@@ -45,7 +43,6 @@ public class ThreadIn extends Thread {
 					break;
 				}
 			} catch (IOException | ClassNotFoundException e) {
-				//e.printStackTrace();	
 			}
 			
 		}

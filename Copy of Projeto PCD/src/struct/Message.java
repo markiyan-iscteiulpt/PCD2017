@@ -3,19 +3,20 @@ package struct;
 import java.io.Serializable;
 import java.util.HashMap;
 
-import server.ThreadOut;
+import server.Dispatcher;
 
 public class Message implements Serializable{
 	
 	private static final long serialVersionUID = -5941465274308094059L;
 	private Type type;
-	private ThreadOut tout;
+	private Dispatcher tout;
 	private Request request;
 	private HashMap<String, Data> response;
 	private Article article;
 	private String request_string;
 	private int dwr_sequence;
 	private int sequence_number;
+	private int ID;
 
 	
 	public Message(Type type , Request request) {
@@ -23,15 +24,16 @@ public class Message implements Serializable{
 		this.request = request;
 	}
 	
-	public Message(Type type) {
+	public Message(Type type, int id) {
 		this.type = type;
+		this.setID(id);
 	}
 	
 	
 	public Message(Type type, HashMap<String, Data> response, int sequence_number, int dwr_sequence){
 		this.type = type;
 		this.response = response;
-		this.sequence_number = sequence_number;
+		this.ID = sequence_number;
 		this.dwr_sequence = dwr_sequence;
 	}
 	
@@ -40,12 +42,12 @@ public class Message implements Serializable{
 		this.response = response;
 	}
 	
-	public Message(Type type, Article article, String s, int seq_number, int dwr_number){
+	public Message(Type type, Article article, String s, int seq_number, int disp_id){
 		this.type = type;
 		this.setArticle(article);
 		this.request_string = s;
-		this.dwr_sequence = dwr_number;
 		this.sequence_number = seq_number;
+		this.ID = disp_id;
 	}
 	
 	public int getDwr_sequence() {
@@ -81,11 +83,11 @@ public class Message implements Serializable{
 		this.response = response;
 	}
 
-	public ThreadOut getTout() {
+	public Dispatcher getTout() {
 		return tout;
 	}
 
-	public void setTout(ThreadOut tout) {
+	public void setTout(Dispatcher tout) {
 		this.tout = tout;
 	}
 
@@ -111,5 +113,13 @@ public class Message implements Serializable{
 
 	public void setSequenceNumber(int sequence_number) {
 		this.sequence_number = sequence_number;
+	}
+
+	public int getID() {
+		return ID;
+	}
+
+	public void setID(int iD) {
+		ID = iD;
 	}
 }

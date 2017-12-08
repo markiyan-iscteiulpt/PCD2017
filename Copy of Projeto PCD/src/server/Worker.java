@@ -22,12 +22,14 @@ public class Worker implements Serializable, Runnable{
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private Socket socket;
-	private ThreadOut tout;
+	private Dispatcher tout;
 	private boolean inUse;
+	private int ID;
 	
-	public Worker(InetAddress address, int port) {
+	public Worker(InetAddress address, int port, int id) {
 		this.adress = address;
 		this.PORT = port;
+		this.ID = id;
 		connectToServer();
 	}
 	
@@ -42,7 +44,7 @@ public class Worker implements Serializable, Runnable{
 				Thread.sleep(5000);
 				connectToServer();
 			} catch (InterruptedException e1) {
-				//e1.printStackTrace();
+				e1.printStackTrace();
 			}
 		}
 	}
@@ -56,9 +58,9 @@ public class Worker implements Serializable, Runnable{
 						findExpression(m);
 				}
 			} catch (ClassNotFoundException e) {
-				//e.printStackTrace();
+				e.printStackTrace();
 			} catch (IOException e) {
-				//e.printStackTrace();
+				e.printStackTrace();
 			}
 	}
 }
@@ -83,22 +85,22 @@ public class Worker implements Serializable, Runnable{
 						if(ocurr_num>0){
 							res_set.get(article.getHeader()).setOcurr_number(ocurr_num);}
 						}
-	this.out.writeObject(new Message(Type.RESULT, res_set, m.getDwr_sequence(), m.getSequenceNumber()));
+	this.out.writeObject(new Message(Type.RESULT, res_set, m.getID(), m.getSequenceNumber()));
 	}
 	
 	private void auth(){
 		try {
-			out.writeObject(new Message(Type.WORKER));
+			out.writeObject(new Message(Type.WORKER, this.ID));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void setTout(ThreadOut tout) {
+	public void setTout(Dispatcher tout) {
 		this.tout = tout;
 	}
 	
-	public ThreadOut getTout(){
+	public Dispatcher getTout(){
 		return this.tout;
 	}
 
@@ -109,20 +111,13 @@ public class Worker implements Serializable, Runnable{
 	public void setInUse(boolean inUse) {
 		this.inUse = inUse;
 	}
+
+	public int getID() {
+		return ID;
+	}
+
+	public void setID(int iD) {
+		ID = iD;
+	}
 	
-//	public synchronized void lock() {
-//		while(inUse){ 
-//			try{ 
-//				wait();
-//			}catch(InterruptedException e){
-//				e.printStackTrace();
-//			} 
-//		}
-//		inUse=true;
-//	}
-//	
-//	public synchronized void unlock(){
-//		inUse=false; 
-//		notifyAll();
-//	}
 }
