@@ -38,8 +38,11 @@ public class DealWithRequest extends Thread {
 			Dispatcher disp;
 				while((disp = server.getWorkerQueue().getFreeDispather())!=null){
 					this.taken_thread = disp;
+					if(aux < this.article_list.size()){
 					this.taken_thread.sendMessage(new Message(Type.SERVER, this.article_list.get(aux), this.reqString, this.seq_number, disp.getID()));
+					System.out.println("[THREAD_NR: " + this.taken_thread.getID()+ " WORKING]");
 					aux++;
+					}
 			}
 		}
 	}
@@ -47,8 +50,6 @@ public class DealWithRequest extends Thread {
 	public synchronized void reciveResponse(Message m){
 		response_num++;
 		server.getWorkerQueue().setDispathcerFree(m.getID());
-		
-		System.out.println("[RESPONSE_NR] " + response_num);
 		if(response_num != lim){
 			for(String d : m.getHashMap().keySet()){
 				res_set.put(d, m.getHashMap().get(d));
@@ -58,6 +59,7 @@ public class DealWithRequest extends Thread {
 			this.tout.sendMessage(result_message);
 			this.server.getDwr_list().remove(this.seq_number);
 			this.server.getWorkerQueue().FreeAll();
+			System.out.println("RESPONSE SET SIZE: " + res_set.size());
 		}
 	}
 

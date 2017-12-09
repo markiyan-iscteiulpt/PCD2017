@@ -62,10 +62,14 @@ public class Server {
 
 
 	public synchronized void newRequestArrived(Request req) {
+		if(getWorkerQueue().getDispatcher_map().size()>0){
 			DealWithRequest dwr = new DealWithRequest(this.articles, req.getRequestString(), req.getTout(), this, this.sequence_number);
 			dwr_list.put(sequence_number,dwr);
 			this.sequence_number++;
 			dwr.start();
+		}else{
+			System.out.println("NO WORKERS");
+		}
 	}
 
 
